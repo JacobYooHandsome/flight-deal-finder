@@ -25,27 +25,18 @@ class FlightSearch:
             IATA_array.append(location_res.json()["locations"][0]["city"]["code"])
         return IATA_array
 
-    def find_deals(self, deal_params):
-        search_res = r.get(url=f"{self.FLIGHT_URL}v2/search", headers=self.flight_headers, params=deal_params)
+    def find_deals(self, fly_from, fly_to, date_from, date_to, price_limit, currency="USD", sort_by="price"):
+        search_params = {
+            "fly_from": fly_from,
+            "fly_to": fly_to,
+            "date_from": date_from,
+            "date_to": date_to,
+            "price_to": price_limit,
+            "curr": currency,
+            "sort": sort_by
+        }
+
+        search_res = r.get(url=f"{self.FLIGHT_URL}v2/search", headers=self.flight_headers, params=search_params)
         search_res.raise_for_status()
         search_data = search_res.json()
         return search_data
-        # try:
-        #     with open("response.json", "r") as json_file:
-        #         data = json.load(json_file)
-        #         data.update(search_data)
-        # except:
-        #     with open("response.json", "w") as json_file:
-        #         json.dump(search_data, json_file, indent=4)
-        # else:
-        #     with open("response.json", "w") as json_file:
-        #         json.dump(search_data, json_file, indent=4)
-
-# for result in search_data, find the lowest price
-# price = search_data["data"][0]["price"]
-
-# city_from = search_data["data"][0]["cityFrom"]
-# code_from = search_data["data"][0]["cityCodeFrom"]
-
-# city_to = search_data["data"][0]["cityTo"]
-# code_to = search_data["data"][0]["cityCodeTo"]
